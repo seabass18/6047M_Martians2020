@@ -12,7 +12,7 @@ using namespace vex;
 
 // A global instance of competition
 competition Competition;
-
+//Subaschin is a nerd
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
