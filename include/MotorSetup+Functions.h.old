@@ -15,6 +15,15 @@ gyro          gyroSandwhich(Brain.ThreeWirePort.A);
 controller    Controller1;
 controller    Controller2(controllerType::partner);
 int Switch = 0;
+
+void highTower(){
+  ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
+  vex::task::sleep(50);
+  lift.startRotateTo(3, rotationUnits::rev, 80, velocityUnits::pct);
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.print("Position High Tower");
+}
+
 void forwards( float rotations, int vel ){
 
 frontRight.startRotateFor(rotations,rotationUnits::rev,vel,vex::velocityUnits::pct);
