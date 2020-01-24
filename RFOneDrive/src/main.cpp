@@ -88,7 +88,20 @@ void pre_auton(void) {
 
 void autonomous(void) {
   // ..........................................................................
-  // Insert autonomous user code here.
+popRamp();
+ramp.rotateTo( 0, rev, 100, velocityUnits::pct);
+intake(0);
+forwards(3,50);
+wait(.5,sec);
+backward(1.7,60);
+lefto(1.2,100);
+intake(0);
+//outake(.25);
+forwards(.9,100);
+ramp.rotateFor(3,rev,100, velocityUnits::pct);
+ramp.startRotateFor(2.3, rev, 50, velocityUnits::pct);
+wait(2,sec);
+backward(1,100);
   // ..........................................................................
 }
 
@@ -154,6 +167,13 @@ ramp.setVelocity(70, pct);
    isRampSpinning=true;
  
  }
+    
+    else if (Controller1.ButtonY.pressing()){
+ramp.setVelocity(30,pct);
+   ramp.spin(fwd);
+ isRampSpinning=true;
+ }
+    
  else if (Controller1.ButtonB.pressing()){
 //Move Ramp Back
    ramp.spin(reverse, 100, pct);
