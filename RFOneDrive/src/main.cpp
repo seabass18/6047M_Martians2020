@@ -20,7 +20,7 @@ using namespace vex;
 void highTower(){
   ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  lift.startRotateTo(3, rotationUnits::rev, 80, velocityUnits::pct);
+  lift.startRotateTo(3.02, rotationUnits::rev, 80, velocityUnits::pct);
   Controller1.Screen.clearScreen();
   Controller1.Screen.print("Position High Tower");
 }
@@ -28,7 +28,7 @@ void highTower(){
 void lowTower(){
   ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  lift.rotateTo(2.5, rotationUnits::rev, 100, velocityUnits::pct);
+  lift.rotateTo(2.4, rotationUnits::rev, 100, velocityUnits::pct);
   Controller1.Screen.clearScreen();
   Controller1.Screen.print("Position Low Tower");
 }

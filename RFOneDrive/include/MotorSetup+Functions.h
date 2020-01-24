@@ -2,8 +2,8 @@
 
 using namespace vex;
 
-vex::motor         frontRight(PORT16, gearSetting::ratio18_1, true);
-vex::motor         frontLeft(PORT2, gearSetting::ratio18_1);
+vex::motor         frontRight(PORT12, gearSetting::ratio18_1, true);
+vex::motor         frontLeft(PORT11, gearSetting::ratio18_1);
 vex::motor         backRight(PORT3, gearSetting::ratio18_1, true);
 vex::motor         backLeft(PORT4, gearSetting::ratio18_1);
 vex::motor         leftIntake(PORT7, gearSetting::ratio18_1);
