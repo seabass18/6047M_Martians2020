@@ -78,3 +78,15 @@ rightIntake.startRotateFor(-distance,rev, 200,rpm);
 leftIntake.startRotateFor(-distance,rev, 200,rpm);
 
 }
+
+void popRamp(){
+
+intake(0);
+wait(500,msec);
+ramp.startRotateTo(2.5, rotationUnits::rev, 100, velocityUnits::pct);
+task::sleep(300);
+lift.rotateTo(2, rotationUnits::rev, 100, velocityUnits::pct);
+intake(0);
+lift.rotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+
+}
