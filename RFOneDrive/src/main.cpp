@@ -18,27 +18,30 @@ using namespace vex;
 
 
 void highTower(){
+  //Controller1.Screen.clearScreen();
+  //Controller1.Screen.print("Position High Tower");
   ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   lift.startRotateTo(3.02, rotationUnits::rev, 80, velocityUnits::pct);
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.print("Position High Tower");
+  //Controller1.Screen.clearScreen();
 }
 
 void lowTower(){
+  //Controller1.Screen.clearScreen();
+  //Controller1.Screen.print("Position Low Tower");
   ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   lift.rotateTo(2.4, rotationUnits::rev, 100, velocityUnits::pct);
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.print("Position Low Tower");
+  //Controller1.Screen.clearScreen();
 }
 
 void resetArm(){
+  //Controller1.Screen.clearScreen();
+  //Controller1.Screen.print("Position Arm Reset");
   lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.print("Position Arm Reset");
+  //Controller1.Screen.clearScreen();
 }
 
 /*void stackCubes(){
@@ -91,13 +94,14 @@ void autonomous(void) {
 popRamp();
 ramp.rotateTo( 0, rev, 100, velocityUnits::pct);
 intake(0);
-forwards(3,50);
+forwards(3.03,45);
 wait(.5,sec);
-backward(1.7,60);
-lefto(1.2,100);
+backward(1.7,45);
 intake(0);
+wait(.5,sec);
+righto(1.1,30);
 //outake(.25);
-forwards(.9,100);
+forwards(1.15,70);
 ramp.rotateFor(3,rev,100, velocityUnits::pct);
 ramp.startRotateFor(2.3, rev, 50, velocityUnits::pct);
 wait(2,sec);
@@ -180,7 +184,7 @@ ramp.setVelocity(30,pct);
    isRampSpinning=true;
  
  }
- else 
+ else
  //Stop ramp and prevent ramp from moving
  if (isRampSpinning==true){
    ramp.stop(brakeType::brake);

@@ -55,8 +55,8 @@ backLeft.rotateFor(-rotations,rotationUnits::rev,vel,vex::velocityUnits::pct);
 
 
 void intake(float Back){
-rightIntake.setVelocity(100,pct);
-leftIntake.setVelocity(100,pct);
+rightIntake.setVelocity(90,pct);
+leftIntake.setVelocity(90,pct);
 if(Back != 0){
   rightIntake.startRotateFor(Back, rev);
   leftIntake.startRotateFor(Back, rev);
