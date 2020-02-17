@@ -1,19 +1,17 @@
 #include "vex.h"
+
 using namespace vex;
 
-//----------------------------------------Motor Setup----------------------------------------//
-brain         Brain;
-motor         frontRight(PORT12, gearSetting::ratio18_1, true);
-motor         frontLeft(PORT11, gearSetting::ratio18_1);
-motor         backRight(PORT3, gearSetting::ratio18_1, true);
-motor         backLeft(PORT4, gearSetting::ratio18_1);
-motor         leftIntake(PORT7, gearSetting::ratio18_1);
-motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
-motor         ramp(PORT5, true);
-motor         lift(PORT6, true);
-gyro          gyroSandwhich(Brain.ThreeWirePort.A);
-controller    Controller1;
-controller    Controller2(controllerType::partner);
+vex::motor         frontRight(PORT12, gearSetting::ratio18_1, true);
+vex::motor         frontLeft(PORT11, gearSetting::ratio18_1);
+vex::motor         backRight(PORT3, gearSetting::ratio18_1, true);
+vex::motor         backLeft(PORT4, gearSetting::ratio18_1);
+vex::motor         leftIntake(PORT7, gearSetting::ratio18_1);
+vex::motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
+vex::motor         ramp(PORT5, true);
+vex::motor         lift(PORT6, true);
+vex::controller    Controller1;
+
 int Switch = 0;
 void forwards( float rotations, int vel ){
 
@@ -57,8 +55,8 @@ backLeft.rotateFor(-rotations,rotationUnits::rev,vel,vex::velocityUnits::pct);
 
 
 void intake(float Back){
-rightIntake.setVelocity(100,pct);
-leftIntake.setVelocity(100,pct);
+rightIntake.setVelocity(90,pct);
+leftIntake.setVelocity(90,pct);
 if(Back != 0){
   rightIntake.startRotateFor(Back, rev);
   leftIntake.startRotateFor(Back, rev);
@@ -78,20 +76,6 @@ void outake(float distance){
 
 rightIntake.startRotateFor(-distance,rev, 200,rpm);
 leftIntake.startRotateFor(-distance,rev, 200,rpm);
-
-}
-
-/*void rampo(int revso, float percentage){
-ramp.rotateTo(revso,percentage,pct)
-
-}
-*/
-
-void lowTower(){
-
-ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
-task::sleep(50);
-lift.startRotateTo(3, rotationUnits::rev, 100, velocityUnits::pct);
 
 }
 
