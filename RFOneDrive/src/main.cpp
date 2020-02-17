@@ -16,22 +16,79 @@
 using namespace vex;
 //test
 
+int speed = 100;
+int stack = 100;
+
+int Debug(){
+  while(1){
+    Brain.Screen.print(stack);
+    wait(1, sec);
+    Brain.Screen.clearLine();
+  }
+  return(0);
+}
+
+int Stack(){
+  while(1){
+      double rampPosition=ramp.rotation(rev);
+          Brain.Screen.clearLine(1);
+      Brain.Screen.setCursor(1, 0);
+       Brain.Screen.print("hello %f", rampPosition);
+       Brain.Screen.render();
+    while(Controller1.ButtonA.pressing()){
+     ramp.spin(forward, stack, velocityUnits::pct);
+      if(stack > 20){
+        stack = stack-0.000000000000005;
+      }
+      wait(1, msec);
+    }
+    stack = 100;
+    
+     if (Controller1.ButtonX.pressing()){
+      //Push Ramp Forward
+      ramp.setVelocity(70, pct);
+      ramp.spin(fwd);
+      /*
+      rampSpeed=rampSpeed-10;
+      Controller1.Screen.print("rampSpeed");*/
+
+    }else if (Controller1.ButtonY.pressing()){
+      if(rampPosition>3){
+       ramp.setVelocity(30,pct);
+      }
+      else{
+       ramp.setVelocity(70,pct);
+      }
+      
+      ramp.spin(fwd); 
+
+    }else if (Controller1.ButtonB.pressing()){
+      //Move Ramp Back
+      ramp.spin(reverse, 100, pct);
+ 
+    } else{
+      ramp.stop();
+    }
+  }
+  return(0);
+}
+
 
 void highTower(){
   //Controller1.Screen.clearScreen();
   //Controller1.Screen.print("Position High Tower");
-  ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
+  //ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  lift.startRotateTo(3.02, rotationUnits::rev, 80, velocityUnits::pct);
+  lift.startRotateTo(2.05, rotationUnits::rev, 80, velocityUnits::pct);
   //Controller1.Screen.clearScreen();
 }
 
 void lowTower(){
   //Controller1.Screen.clearScreen();
   //Controller1.Screen.print("Position Low Tower");
-  ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
+  //ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  lift.rotateTo(2.4, rotationUnits::rev, 100, velocityUnits::pct);
+  lift.rotateTo(1.37, rotationUnits::rev, 100, velocityUnits::pct);
   //Controller1.Screen.clearScreen();
 }
 
@@ -40,7 +97,7 @@ void resetArm(){
   //Controller1.Screen.print("Position Arm Reset");
   lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+  //ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   //Controller1.Screen.clearScreen();
 }
 
@@ -73,8 +130,7 @@ competition Competition;
 
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
-  vexcodeInit();
-
+  
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -93,19 +149,22 @@ void autonomous(void) {
   // ..........................................................................
 popRamp();
 ramp.rotateTo( 0, rev, 100, velocityUnits::pct);
-intake(0);
-forwards(3.03,45);
+intakeSwitch(0,100);
+forwards(2.7,45);
 wait(.5,sec);
 backward(1.7,45);
-intake(0);
+intakeSwitch(0,100);
+intakeSwitch(0,5);
 wait(.5,sec);
-righto(1.1,30);
+righto(1.1,20);
+intakeSwitch(0,5);
 //outake(.25);
-forwards(1.15,70);
+forwards(1.15,40);
 ramp.rotateFor(3,rev,100, velocityUnits::pct);
 ramp.startRotateFor(2.3, rev, 50, velocityUnits::pct);
 wait(2,sec);
 backward(1,100);
+resetArm();
   // ..........................................................................
 }
 
@@ -125,22 +184,28 @@ void usercontrol(void) {
     NEUTRAL=1,
     SPIN=2
   };
-
   motorState intakeState=NEUTRAL;
   motorState rampState=NEUTRAL;
   motorState liftState=NEUTRAL;*/
   // User control code here, inside the loop
+  task a(Stack);
+  task b(Debug);
   while (1) {
-
+    frontLeft.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
+    frontRight.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()-Controller1.Axis1.value(), velocityUnits::pct);
+    backLeft.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
+    backRight.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()-Controller1.Axis1.value(), velocityUnits::pct);
 
 /*---------------------------------------------------------------------------------Arm Control---------------------------------------------------------------------------------*/
  bool isLiftSpinning;
  //=false;
+
  
+
  if (Controller1.ButtonL1.pressing()){
    //Lift Arm
-lift.spin(fwd, 100, pct);
-isLiftSpinning=true;
+  lift.spin(fwd, 100, pct);
+  isLiftSpinning=true;
  
  }
  else if (Controller1.ButtonL2.pressing()){
@@ -158,39 +223,26 @@ isLiftSpinning=true;
  }
 /*---------------------------------------------------------------------------------End of Arm Control---------------------------------------------------------------------------------*/
  
+/*---------------------------------------------------------------------------------Ramp Function---------------------------------------------------------------------------------*/
 
+/*float rampRevs = 5.3;
+int rampSpeed;
+
+while( ramp.value(vex::rotationUnits::rev) < rampRevs){
+*/
+
+
+  
+
+/*---------------------------------------------------------------------------------End of Ramp Function---------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------Ramp Control---------------------------------------------------------------------------------*/
  bool isRampSpinning;
  //=false;
  
- if (Controller1.ButtonX.pressing()){
-//Push Ramp Forward
-ramp.setVelocity(70, pct);
-   ramp.spin(fwd);
-   isRampSpinning=true;
- 
- }
-    
-    else if (Controller1.ButtonY.pressing()){
-ramp.setVelocity(30,pct);
-   ramp.spin(fwd);
- isRampSpinning=true;
- }
-    
- else if (Controller1.ButtonB.pressing()){
-//Move Ramp Back
-   ramp.spin(reverse, 100, pct);
-   isRampSpinning=true;
- 
- }
- else
- //Stop ramp and prevent ramp from moving
- if (isRampSpinning==true){
-   ramp.stop(brakeType::brake);
-   isRampSpinning=false;
-   }
- 
+float rampSpeed=100; 
+
+
  
 /*---------------------------------------------------------------------------------End of Ramp Control---------------------------------------------------------------------------------*/
 
@@ -225,6 +277,7 @@ ramp.setVelocity(30,pct);
    
  }
 
+
  /*else {
    intakeState=NEUTRAL;
  }*/
@@ -241,16 +294,21 @@ ramp.setVelocity(30,pct);
     // Insert user code here. This is where you use the joystick values to
     // update your motors, etc.
     // ........................................................................
+    //Strafe
+    /*
+     frontLeft.spin( fwd, Controller1.Axis3.position(), percent);
+     backLeft.spin( fwd, Controller1.Axis3.position(), percent);
+     frontRight.spin( reverse, Controller1.Axis2.position(), percent);
+     backRight.spin( reverse, Controller1.Axis2.position(), percent);
+    //Drive
+     frontRight.spin( fwd, Controller1.Axis1.position(),percent);
+     backLeft.spin( fwd, Controller1.Axis4.position(), percent);
+     backRight.spin( fwd, Controller1.Axis1.position(), percent);
+     frontLeft.spin( fwd, Controller1.Axis4.position(), percent);
+*/
 
-     frontLeft.setVelocity(Controller1.Axis3.position(), percent);
-     backLeft.setVelocity(Controller1.Axis3.position(), percent);
-     frontRight.setVelocity(Controller1.Axis2.position(), percent);
-     backRight.setVelocity(Controller1.Axis2.position(), percent);
 
-     frontRight.spin(fwd);
-     backRight.spin(fwd);
-     frontLeft.spin(fwd);
-     backLeft.spin(fwd);  
+
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.

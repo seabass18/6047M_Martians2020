@@ -2,15 +2,16 @@
 
 using namespace vex;
 
-vex::motor         frontRight(PORT12, gearSetting::ratio18_1, true);
-vex::motor         frontLeft(PORT11, gearSetting::ratio18_1);
+vex::brain         Brain;
+vex::motor         frontRight(PORT1, gearSetting::ratio18_1, true);
+vex::motor         frontLeft(PORT2, gearSetting::ratio18_1);
 vex::motor         backRight(PORT3, gearSetting::ratio18_1, true);
 vex::motor         backLeft(PORT4, gearSetting::ratio18_1);
-vex::motor         leftIntake(PORT7, gearSetting::ratio18_1);
-vex::motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
-vex::motor         ramp(PORT5, true);
-vex::motor         lift(PORT6, true);
-vex::controller    Controller1;
+vex::motor         leftIntake(PORT6, gearSetting::ratio18_1);
+vex::motor         rightIntake(PORT5, gearSetting::ratio18_1, true);
+vex::motor         ramp(PORT7, true);
+vex::motor         lift(PORT8);
+vex::controller    Controller1; 
 
 int Switch = 0;
 void forwards( float rotations, int vel ){
@@ -54,9 +55,10 @@ backLeft.rotateFor(-rotations,rotationUnits::rev,vel,vex::velocityUnits::pct);
 }
 
 
-void intake(float Back){
-rightIntake.setVelocity(90,pct);
-leftIntake.setVelocity(90,pct);
+void intakeSwitch(float Back, int percent){
+
+rightIntake.setVelocity(percent,pct);
+leftIntake.setVelocity(percent,pct);
 if(Back != 0){
   rightIntake.startRotateFor(Back, rev);
   leftIntake.startRotateFor(Back, rev);
@@ -79,14 +81,23 @@ leftIntake.startRotateFor(-distance,rev, 200,rpm);
 
 }
 
+void intake(float distance){
+
+rightIntake.startRotateFor(distance,rev, 200,rpm);
+leftIntake.startRotateFor(distance,rev, 200,rpm);
+
+}
+
+
+
 void popRamp(){
 
-intake(0);
+intakeSwitch(0,100);
 wait(500,msec);
 ramp.startRotateTo(2.5, rotationUnits::rev, 100, velocityUnits::pct);
 task::sleep(300);
 lift.rotateTo(2, rotationUnits::rev, 100, velocityUnits::pct);
-intake(0);
+intakeSwitch(0,100);
 lift.rotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
 
 }
