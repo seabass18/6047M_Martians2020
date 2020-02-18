@@ -31,9 +31,10 @@ int Debug(){
 int Stack(){
   while(1){
       double rampPosition=ramp.rotation(rev);
+      double rampVelocity=-2.16*rampPosition*rampPosition+100;
           Brain.Screen.clearLine(1);
-      Brain.Screen.setCursor(1, 0);
-       Brain.Screen.print("hello %f", rampPosition);
+       Brain.Screen.setCursor(1, 0);
+       Brain.Screen.print("hello %f %f", rampPosition, rampVelocity);
        Brain.Screen.render();
     while(Controller1.ButtonA.pressing()){
      ramp.spin(forward, stack, velocityUnits::pct);
@@ -53,13 +54,7 @@ int Stack(){
       Controller1.Screen.print("rampSpeed");*/
 
     }else if (Controller1.ButtonY.pressing()){
-      if(rampPosition>3){
-       ramp.setVelocity(30,pct);
-      }
-      else{
-       ramp.setVelocity(70,pct);
-      }
-      
+      ramp.setVelocity(rampVelocity, pct);
       ramp.spin(fwd); 
 
     }else if (Controller1.ButtonB.pressing()){
@@ -97,7 +92,7 @@ void resetArm(){
   //Controller1.Screen.print("Position Arm Reset");
   lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
-  //ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+  ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   //Controller1.Screen.clearScreen();
 }
 
