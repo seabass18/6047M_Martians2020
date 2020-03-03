@@ -19,30 +19,16 @@ using namespace vex;
 int speed = 100;
 int stack = 100;
 
-int Debug(){
-  while(1){
-    Brain.Screen.print(stack);
-    wait(1, sec);
-    Brain.Screen.clearLine();
-  }
-  return(0);
-}
+
 
 int Stack(){
   while(1){
-      double rampPosition=ramp.rotation(rev);
-      double rampVelocity=-2.16*rampPosition*rampPosition+100;
-          Brain.Screen.clearLine(1);
-       Brain.Screen.setCursor(1, 0);
-       Brain.Screen.print("hello %f %f", rampPosition, rampVelocity);
-       Brain.Screen.render();
-    while(Controller1.ButtonA.pressing()){
-     ramp.spin(forward, stack, velocityUnits::pct);
-      if(stack > 20){
-        stack = stack-0.000000000000005;
-      }
-      wait(1, msec);
-    }
+    double rampPosition=ramp.rotation(rev);
+    double rampVelocity=-2.16*rampPosition*rampPosition+105;
+    Brain.Screen.clearLine(1);
+    Brain.Screen.setCursor(1, 0);
+    Brain.Screen.print("hello %f %f", rampPosition, rampVelocity);
+    Brain.Screen.render();
     stack = 100;
     
      if (Controller1.ButtonX.pressing()){
@@ -70,30 +56,19 @@ int Stack(){
 
 
 void highTower(){
-  //Controller1.Screen.clearScreen();
-  //Controller1.Screen.print("Position High Tower");
-  //ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   lift.startRotateTo(2.05, rotationUnits::rev, 80, velocityUnits::pct);
-  //Controller1.Screen.clearScreen();
 }
 
 void lowTower(){
-  //Controller1.Screen.clearScreen();
-  //Controller1.Screen.print("Position Low Tower");
-  //ramp.startRotateTo(3.5, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   lift.rotateTo(1.37, rotationUnits::rev, 100, velocityUnits::pct);
-  //Controller1.Screen.clearScreen();
 }
 
 void resetArm(){
-  //Controller1.Screen.clearScreen();
-  //Controller1.Screen.print("Position Arm Reset");
   lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
   vex::task::sleep(50);
   ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
-  //Controller1.Screen.clearScreen();
 }
 
 /*void stackCubes(){
@@ -142,24 +117,27 @@ void pre_auton(void) {
 
 void autonomous(void) {
   // ..........................................................................
-popRamp();
-ramp.rotateTo( 0, rev, 100, velocityUnits::pct);
-intakeSwitch(0,100);
-forwards(2.7,45);
-wait(.5,sec);
-backward(1.7,45);
-intakeSwitch(0,100);
-intakeSwitch(0,5);
-wait(.5,sec);
-righto(1.1,20);
-intakeSwitch(0,5);
-//outake(.25);
-forwards(1.15,40);
-ramp.rotateFor(3,rev,100, velocityUnits::pct);
-ramp.startRotateFor(2.3, rev, 50, velocityUnits::pct);
-wait(2,sec);
-backward(1,100);
-resetArm();
+/*intake(0);
+forwards(2.3,30);
+intake(0);
+*/
+/*
+
+move();
+*/
+intakeSwitch( 0, 100 );
+forwards( 2.65, 40 );
+righto( 1, 30 );
+intakeSwitch( 0, 100 );
+move( 90, 2 );
+forwards( .6, 40 );
+stacko();
+backward(2,30);
+/*
+forwards();
+stack();
+
+*/
   // ..........................................................................
 }
 
@@ -185,6 +163,7 @@ void usercontrol(void) {
   // User control code here, inside the loop
   task a(Stack);
   task b(Debug);
+
   while (1) {
     frontLeft.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
     frontRight.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()-Controller1.Axis1.value(), velocityUnits::pct);
@@ -225,8 +204,6 @@ int rampSpeed;
 
 while( ramp.value(vex::rotationUnits::rev) < rampRevs){
 */
-
-
   
 
 /*---------------------------------------------------------------------------------End of Ramp Function---------------------------------------------------------------------------------*/
@@ -272,7 +249,6 @@ float rampSpeed=100;
    
  }
 
-
  /*else {
    intakeState=NEUTRAL;
  }*/
@@ -314,10 +290,10 @@ float rampSpeed=100;
 // Main will set up the competition functions and callbacks.
 //
 int main() {
-  Controller1.ButtonUp.pressed(highTower);
+  //Controller1.ButtonUp.pressed(highTower);
   Controller1.ButtonDown.pressed(lowTower);
   Controller1.ButtonLeft.pressed(resetArm);
-  //Controller1.ButtonA.pressed(stackCubes);
+  
 
 
   // Set up callbacks for autonomous and driver control periods.

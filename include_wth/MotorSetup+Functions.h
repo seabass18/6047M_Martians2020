@@ -2,32 +2,20 @@
 
 using namespace vex;
 
-vex::brain         Brain;
-vex::motor         frontRight(PORT1, gearSetting::ratio18_1, true);
-vex::motor         frontLeft(PORT2, gearSetting::ratio18_1);
-vex::motor         backRight(PORT3, gearSetting::ratio18_1, true);
-vex::motor         backLeft(PORT4, gearSetting::ratio18_1);
-vex::motor         leftIntake(PORT6, gearSetting::ratio18_1);
-vex::motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
-vex::motor         ramp(PORT7, true);
-vex::motor         lift(PORT8);
-vex::controller    Controller1; 
-inertial           I(PORT9);
+brain         Brain;
+inertial      IntertialA(PORT13);
+motor         frontRight(PORT12, gearSetting::ratio18_1, true);
+motor         frontLeft(PORT11, gearSetting::ratio18_1);
+motor         backRight(PORT3, gearSetting::ratio18_1, true);
+motor         backLeft(PORT4, gearSetting::ratio18_1);
+motor         leftIntake(PORT7, gearSetting::ratio18_1);
+motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
+motor         ramp(PORT5, true);
+motor         lift(PORT6, true);
+controller    Controller1;
+bumper        BumperA(Brain.ThreeWirePort.A);
+
 int Switch = 0;
-
-void move(int deg, float seco){
-  float x = sin(deg)*100;
-  float y = cos(deg)*100;
-  Controller1.Screen.print(x);
-  Controller1.Screen.print("  ");
-  Controller1.Screen.print(y);
-  frontLeft.spin(fwd, y+x, velocityUnits::pct);
-  frontRight.spin(fwd, y-x, velocityUnits::pct);
-  backLeft.spin(fwd, y-x, velocityUnits::pct);
-  backRight.spin(fwd, y+x, velocityUnits::pct);
-  wait(seco, sec);
-}
-
 void forwards( float rotations, int vel ){
 
 frontRight.startRotateFor(rotations,rotationUnits::rev,vel,vex::velocityUnits::pct);
@@ -95,15 +83,6 @@ leftIntake.startRotateFor(-distance,rev, 200,rpm);
 
 }
 
-void intake(float distance){
-
-rightIntake.startRotateFor(distance,rev, 200,rpm);
-leftIntake.startRotateFor(distance,rev, 200,rpm);
-
-}
-
-
-
 void popRamp(){
 
 intakeSwitch(0,100);
@@ -116,27 +95,16 @@ lift.rotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
 
 }
 
-void strafeRight(float revs, int velo){
+void turnDegrees(float degr, int vel){
 
-frontRight.startRotateFor(-revs, rotationUnits::rev, velo, velocityUnits::pct);
-frontLeft.startRotateFor(revs, rotationUnits::rev, velo, velocityUnits::pct);
-backRight.startRotateFor(revs, rotationUnits::rev, velo, velocityUnits::pct);
-backLeft.rotateFor(-revs, rotationUnits::rev, velo, velocityUnits::pct);
+frontRight.spin(fwd);
+frontLeft.spin(fwd);
+backRight.spin(fwd);
+backLeft.spin(fwd);
 
-}
+waitUntil((InertialA.rotation(degrees)>=degr)){
 
-void strafeLeft(float revs, int velo){
-
-frontRight.startRotateFor(revs, rotationUnits::rev, velo, velocityUnits::pct);
-frontLeft.startRotateFor(-revs, rotationUnits::rev, velo, velocityUnits::pct);
-backRight.startRotateFor(-revs, rotationUnits::rev, velo, velocityUnits::pct);
-backLeft.rotateFor(revs, rotationUnits::rev, velo, velocityUnits::pct);
 
 }
-
-void stacko(){
-
-ramp.rotateFor( 2.5, rotationUnits::rev, 50, velocityUnits::pct );
-ramp.rotateFor( 4, rotationUnits::rev, 20, velocityUnits::pct );
 
 }
