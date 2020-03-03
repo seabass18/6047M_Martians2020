@@ -162,7 +162,16 @@ void usercontrol(void) {
   motorState liftState=NEUTRAL;*/
   // User control code here, inside the loop
   task a(Stack);
-  task b(Debug);
+  //task b(Debug);
+
+Controller1.Screen.clearScreen();
+Controller1.Screen.print("FR " && frontRight.temperature(temperatureUnits::fahrenheit));
+Controller1.Screen.newLine();
+Controller1.Screen.print("FL " && frontLeft.temperature(temperatureUnits::fahrenheit));
+Controller1.Screen.newLine();
+Controller1.Screen.print("BR " && backRight.temperature(temperatureUnits::fahrenheit));
+Controller1.Screen.newLine();
+Controller1.Screen.print("BL " && backLeft.temperature(temperatureUnits::fahrenheit));
 
   while (1) {
     frontLeft.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
@@ -225,22 +234,22 @@ float rampSpeed=100;
  //intakeState=NEUTRAL;
  
  if (Controller1.ButtonR1.pressing()){
-//Intake
+
    rightIntake.spin(fwd, 100, pct);
    leftIntake.spin(fwd, 100, pct);
    //intakeState=SPIN;
  
  }
  else if (Controller1.ButtonR2.pressing()){
-//Outake
+
 
    rightIntake.spin(reverse, 100, pct);
    leftIntake.spin(reverse, 100, pct);
    //intakeState=SPIN;
  
  }
- //else if (intakeState==SPIN){
-   else {
+
+  else {
    //Brake
    //brakeType::brake prevents the intake from coasting which could potentially let cubes fall out or accidently be intaken
    rightIntake.stop(brakeType::brake);

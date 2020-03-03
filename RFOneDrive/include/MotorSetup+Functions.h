@@ -12,7 +12,7 @@ vex::motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
 vex::motor         ramp(PORT7, true);
 vex::motor         lift(PORT8);
 vex::controller    Controller1; 
-inertial           I(PORT9);
+inertial           I(PORT11);
 int Switch = 0;
 
 void move(int deg, float seco){
@@ -139,4 +139,58 @@ void stacko(){
 ramp.rotateFor( 2.5, rotationUnits::rev, 50, velocityUnits::pct );
 ramp.rotateFor( 4, rotationUnits::rev, 20, velocityUnits::pct );
 
+}
+
+void GL(int deg){
+  backLeft.setStopping(brakeType::brake);
+  frontLeft.setStopping(brakeType::brake);
+  backRight.setStopping(brakeType::brake);
+  frontRight.setStopping(brakeType::brake);
+  I.setRotation(0, rotationUnits::deg);
+  while(I.rotation() > 360-deg){
+    int turn = I.rotation()-360-deg;
+    int driveVelocity=-(1/162)*turn*turn+25;
+    frontLeft.spin(reverse, driveVelocity, velocityUnits::pct);
+    frontRight.spin(forward, driveVelocity, velocityUnits::pct);
+    backLeft.spin(reverse, driveVelocity, velocityUnits::pct);
+    backRight.spin(forward, driveVelocity, velocityUnits::pct);
+  }
+  frontLeft.stop();
+  frontRight.stop();
+  backLeft.stop();
+  backRight.stop();
+}
+
+void GR(int deg){
+  backLeft.setStopping(brakeType::brake);
+  frontLeft.setStopping(brakeType::brake);
+  backRight.setStopping(brakeType::brake);
+  frontRight.setStopping(brakeType::brake);
+  I.setRotation(0, rotationUnits::deg);
+  while(I.rotation() < deg){
+    int turn = I.rotation();
+    int driveVelocity=-(1/162)*turn*turn+25;
+    frontLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    frontRight.spin(reverse, driveVelocity, velocityUnits::pct);
+    backLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    backRight.spin(reverse, driveVelocity, velocityUnits::pct);
+  }
+  while(I.rotation() > deg){
+    int driveVelocity = -5;
+    frontLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    frontRight.spin(reverse, driveVelocity, velocityUnits::pct);
+    backLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    backRight.spin(reverse, driveVelocity, velocityUnits::pct);
+  }
+  while(I.rotation() < deg){
+    int driveVelocity = 1;
+    frontLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    frontRight.spin(reverse, driveVelocity, velocityUnits::pct);
+    backLeft.spin(forward, driveVelocity, velocityUnits::pct);
+    backRight.spin(reverse, driveVelocity, velocityUnits::pct);
+  }
+  frontLeft.stop();
+  frontRight.stop();
+  backLeft.stop();
+  backRight.stop();
 }
