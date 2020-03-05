@@ -23,12 +23,9 @@ int stack = 100;
 
 int Stack(){
   while(1){
+
     double rampPosition=ramp.rotation(rev);
-    double rampVelocity=-2.16*rampPosition*rampPosition+105;
-    Brain.Screen.clearLine(1);
-    Brain.Screen.setCursor(1, 0);
-    Brain.Screen.print("hello %f %f", rampPosition, rampVelocity);
-    Brain.Screen.render();
+    double rampVelocity=-2.16*rampPosition*rampPosition+120;
     stack = 100;
     
      if (Controller1.ButtonX.pressing()){
@@ -61,14 +58,18 @@ void highTower(){
 }
 
 void lowTower(){
+
   vex::task::sleep(50);
-  lift.rotateTo(1.37, rotationUnits::rev, 100, velocityUnits::pct);
+  lift.rotateTo(1.6, rotationUnits::rev, 100, velocityUnits::pct);
+
 }
 
 void resetArm(){
-  lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
-  vex::task::sleep(50);
+
   ramp.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+  wait(50, msec);
+  lift.startRotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+
 }
 
 /*void stackCubes(){
@@ -125,14 +126,44 @@ intake(0);
 
 move();
 */
-intakeSwitch( 0, 100 );
-forwards( 2.65, 40 );
-righto( 1, 30 );
-intakeSwitch( 0, 100 );
-move( 90, 2 );
-forwards( .6, 40 );
+popRamp();
+intakeSwitch(0, 100);
+forwards(2.9, 40);
+vexDelay(100);
+strafeLeft(1, 50);
+forwards(.8, 30);
+vexDelay(400);
+backward(1.5, 50);
+intakeSwitch(0, 100);
+backward(1.6, 60);
+righto(1.4, 30);
+move(90, .7);
+vexDelay(100);
+forwards(1.7, 40);
+intakeSwitch(0,100);
+vexDelay(300);
+intakeSwitch(0, 100);
 stacko();
-backward(2,30);
+vexDelay(200);
+backward(2,50);
+
+/*intakeSwitch(0, 100);
+forwards(2, 40);
+backward(1.65, 70);
+vexDelay(100);
+strafeRight(2.3, 60);
+forwards(2.85, 40);
+vexDelay(100);
+backward(2.65, 80);
+righto(1.4, 30);
+intakeSwitch( 0, 100 );
+move(90, .6);
+vexDelay(100);
+forwards(.6, 30);
+stacko();
+backward(2,50);*/
+
+
 /*
 forwards();
 stack();
@@ -164,26 +195,25 @@ void usercontrol(void) {
   task a(Stack);
   //task b(Debug);
 
-Controller1.Screen.clearScreen();
+/*Controller1.Screen.clearScreen();
 Controller1.Screen.print("FR " && frontRight.temperature(temperatureUnits::fahrenheit));
 Controller1.Screen.newLine();
 Controller1.Screen.print("FL " && frontLeft.temperature(temperatureUnits::fahrenheit));
 Controller1.Screen.newLine();
 Controller1.Screen.print("BR " && backRight.temperature(temperatureUnits::fahrenheit));
 Controller1.Screen.newLine();
-Controller1.Screen.print("BL " && backLeft.temperature(temperatureUnits::fahrenheit));
+Controller1.Screen.print("BL " && backLeft.temperature(temperatureUnits::fahrenheit));*/
 
   while (1) {
-    frontLeft.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
-    frontRight.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()-Controller1.Axis1.value(), velocityUnits::pct);
-    backLeft.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()+Controller1.Axis1.value(), velocityUnits::pct);
-    backRight.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()-Controller1.Axis1.value(), velocityUnits::pct);
+    frontLeft.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()+Controller1.Axis1.value()/2, velocityUnits::pct);
+    frontRight.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()-Controller1.Axis1.value()/2, velocityUnits::pct);
+    backLeft.spin(fwd, Controller1.Axis3.value()-Controller1.Axis4.value()+Controller1.Axis1.value()/2, velocityUnits::pct);
+    backRight.spin(fwd, Controller1.Axis3.value()+Controller1.Axis4.value()-Controller1.Axis1.value()/2, velocityUnits::pct);
 
 /*---------------------------------------------------------------------------------Arm Control---------------------------------------------------------------------------------*/
  bool isLiftSpinning;
  //=false;
 
- 
 
  if (Controller1.ButtonL1.pressing()){
    //Lift Arm
@@ -218,12 +248,31 @@ while( ramp.value(vex::rotationUnits::rev) < rampRevs){
 /*---------------------------------------------------------------------------------End of Ramp Function---------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------Ramp Control---------------------------------------------------------------------------------*/
- bool isRampSpinning;
+//bool isRampSpinning;
  //=false;
+
+
+/* if (Controller1.ButtonY.pressing()){
+   //Ramp Forward
+   ramp.setVelocity(rampVelocity, pct);
+   ramp.spin(fwd); 
+   isRampSpinning=true;
  
-float rampSpeed=100; 
+ }
+ else if (Controller1.ButtonB.pressing()){
+   //Ramp Back
+   ramp.spin(reverse, 100, pct);
+   isRampSpinning=true;
+ }
 
-
+ else{
+   //Keep Ramp in Position
+   if (isRampSpinning==true){
+   ramp.stop(brakeType::brake);
+   isRampSpinning=false;
+      }
+    }
+  }*/
  
 /*---------------------------------------------------------------------------------End of Ramp Control---------------------------------------------------------------------------------*/
 
@@ -300,6 +349,7 @@ float rampSpeed=100;
 //
 int main() {
   //Controller1.ButtonUp.pressed(highTower);
+  Controller1.ButtonUp.pressed(highTower);
   Controller1.ButtonDown.pressed(lowTower);
   Controller1.ButtonLeft.pressed(resetArm);
   

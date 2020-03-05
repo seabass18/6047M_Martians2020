@@ -7,8 +7,8 @@ vex::motor         frontRight(PORT1, gearSetting::ratio18_1, true);
 vex::motor         frontLeft(PORT2, gearSetting::ratio18_1);
 vex::motor         backRight(PORT3, gearSetting::ratio18_1, true);
 vex::motor         backLeft(PORT4, gearSetting::ratio18_1);
-vex::motor         leftIntake(PORT6, gearSetting::ratio18_1);
-vex::motor         rightIntake(PORT9, gearSetting::ratio18_1, true);
+vex::motor         leftIntake(PORT10, gearSetting::ratio18_1);
+vex::motor         rightIntake(PORT12, gearSetting::ratio18_1, true);
 vex::motor         ramp(PORT7, true);
 vex::motor         lift(PORT8);
 vex::controller    Controller1; 
@@ -18,9 +18,6 @@ int Switch = 0;
 void move(int deg, float seco){
   float x = sin(deg)*100;
   float y = cos(deg)*100;
-  Controller1.Screen.print(x);
-  Controller1.Screen.print("  ");
-  Controller1.Screen.print(y);
   frontLeft.spin(fwd, y+x, velocityUnits::pct);
   frontRight.spin(fwd, y-x, velocityUnits::pct);
   backLeft.spin(fwd, y-x, velocityUnits::pct);
@@ -106,13 +103,9 @@ leftIntake.startRotateFor(distance,rev, 200,rpm);
 
 void popRamp(){
 
-intakeSwitch(0,100);
-wait(500,msec);
-ramp.startRotateTo(2.5, rotationUnits::rev, 100, velocityUnits::pct);
-task::sleep(300);
-lift.rotateTo(2, rotationUnits::rev, 100, velocityUnits::pct);
-intakeSwitch(0,100);
-lift.rotateTo(0, rotationUnits::rev, 100, velocityUnits::pct);
+outake(2);
+lift.rotateFor( 1, rev, 70, velocityUnits::pct );
+lift.rotateFor( -1, rev, 70, velocityUnits::pct );
 
 }
 
@@ -136,8 +129,8 @@ backLeft.rotateFor(revs, rotationUnits::rev, velo, velocityUnits::pct);
 
 void stacko(){
 
-ramp.rotateFor( 2.5, rotationUnits::rev, 50, velocityUnits::pct );
-ramp.rotateFor( 4, rotationUnits::rev, 20, velocityUnits::pct );
+task (Stack);
+ramp.rotateFor( 6.3, rotationUnits::rev, 70, velocityUnits::pct );
 
 }
 
